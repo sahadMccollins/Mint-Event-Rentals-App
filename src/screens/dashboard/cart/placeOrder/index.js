@@ -210,7 +210,7 @@ export default placeOrder = (props) => {
         text="Continue to Checkout"
         t={t}
         onPress={handleCheckout}
-        disabled={loading}
+        disabled={loading || cart.length === 0}
         loading={loading}
       />
 

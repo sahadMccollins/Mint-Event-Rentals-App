@@ -23,3 +23,11 @@ export const getColorVariants = (product) => {
 
     return Object.values(colorVariants);
 };
+
+export const splitName = (fullName = '') => {
+    const parts = fullName.trim().split(' ');
+    return {
+        first_name: parts[0] || 'N/A',
+        last_name: parts.slice(1).join(' ') || 'N/A',
+    };
+};

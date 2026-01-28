@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {fontSizes, windowHeight, windowWidth} from '@theme/appConstant';
+import { StyleSheet } from 'react-native';
+import { fontSizes, windowHeight, windowWidth } from '@theme/appConstant';
 import appColors from '@theme/appColors';
 import appFonts from '@theme/appFonts';
 
@@ -40,7 +40,7 @@ export default inputStyles = StyleSheet.create({
   },
   textInput: {
     height: windowHeight(50),
-    fontSize: fontSizes.FONT19,
+    // fontSize: fontSizes.FONT19,
     fontFamily: appFonts.LatoRegular,
     fontSize: fontSizes.FONT16,
   },
