@@ -1,0 +1,33 @@
+import { StyleSheet } from 'react-native';
+import { fontSizes, windowHeight, windowWidth } from '@theme/appConstant';
+import appColors from '@theme/appColors';
+import appFonts from '@theme/appFonts';
+
+export default kidsCornerStyles = StyleSheet.create({
+  mainView: {
+    marginHorizontal: windowWidth(14),
+    marginVertical: windowHeight(10),
+    paddingBottom: windowHeight(10),
+  },
+  kidsCorner: {
+    // fontSize: fontSizes.FONT22,
+    // fontFamily: appFonts.LatoBold,
+    fontSize: fontSizes.FONT25,
+    fontWeight: 700,
+    fontFamily: appFonts.LatoBold,
+    // marginHorizontal: windowWidth(20),
+    textAlign: 'center'
+  },
+  clothing: {
+    fontSize: fontSizes.FONT19,
+    fontFamily: appFonts.LatoMedium,
+    color: appColors.grey,
+    marginBottom: windowHeight(20),
+  },
+  seeAll: {
+    fontSize: fontSizes.FONT16,
+    fontFamily: appFonts.LatoMedium,
+    color: appColors.primary,
+    marginRight: windowWidth(5),
+  },
+});
