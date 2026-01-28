@@ -291,6 +291,8 @@ import { Input, DropDown, TextArea } from '@commonComponents';
 import { splitName } from '../../../../utils/helper/helper';
 import { useShopifyCart } from '../../../../hooks/useShopifyCart';
 
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 export default function Payment({ navigation }) {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -312,6 +314,30 @@ export default function Payment({ navigation }) {
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [picking, setPicking] = useState('start'); // start | end
+
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const openRangePicker = () => {
+    setPicking('start');
+    setShow(true);
+  };
+
+
 
   // Event location options
   const eventLocationOptions = [
@@ -366,11 +392,6 @@ export default function Payment({ navigation }) {
     // Validate phone number
     if (!form.phone || form.phone.trim() === '') {
       newErrors.phone = t('requestQuoteModal.phoneError') || 'Phone number is required';
-    }
-
-    // Validate company
-    if (!form.company || form.company.trim() === '') {
-      newErrors.company = 'Company name is required';
     }
 
     // Validate address
@@ -434,6 +455,10 @@ export default function Payment({ navigation }) {
         })),
       };
 
+      console.log("ccartItem", cart);
+
+      return
+
       // 🔹 Send to SAME backend as website
       const response = await fetch(
         // 'https://mccollins-server.vercel.app/api/create-order',
@@ -478,6 +503,65 @@ export default function Payment({ navigation }) {
       setSubmitting(false);
     }
   };
+
+  // const onChangeNew = (event, selectedDate) => {
+  //   setShow(false);
+
+  //   if (!selectedDate) return;
+
+  //   setDate(selectedDate);
+
+  //   // Format date (example: 18 Sep 2026)
+  //   const formattedDate = selectedDate.toLocaleDateString('en-GB', {
+  //     day: '2-digit',
+  //     month: 'short',
+  //     year: 'numeric',
+  //   });
+
+  //   onChange({
+  //     name: 'dateRange',
+  //     value: formattedDate,
+  //   });
+  // };
+
+  const onChangeNew = (event, selectedDate) => {
+    if (!selectedDate) {
+      setShow(false);
+      return;
+    }
+
+    if (picking === 'start') {
+      setStartDate(selectedDate);
+      setDate(selectedDate);
+      setPicking('end');
+      setShow(true); // open again for end date
+      return;
+    }
+
+    // END DATE
+    if (selectedDate < startDate) {
+      Alert.alert('Invalid Date', 'End date cannot be before start date');
+      return;
+    }
+
+    setEndDate(selectedDate);
+    setShow(false);
+
+    const format = d =>
+      d.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      });
+
+    const rangeText = `${format(startDate)} - ${format(selectedDate)}`;
+
+    onChange({
+      name: 'dateRange',
+      value: rangeText,
+    });
+  };
+
 
 
   return (
@@ -612,12 +696,46 @@ export default function Payment({ navigation }) {
               )}
 
               {/* Date Range Input */}
-              <Input
-                placeholder="Select the Date Range"
-                value={form.dateRange}
-                onChangeText={value => onChange({ name: 'dateRange', value })}
-                error={errors.dateRange}
-              />
+              {/* <TouchableOpacity onPress={showDatepicker} >
+                <Input
+                  placeholder="Select the Date Range"
+                  value={form.dateRange}
+                  onChangeText={value => onChange({ name: 'dateRange', value })}
+                  error={errors.dateRange}
+                />
+              </TouchableOpacity> */}
+              <TouchableOpacity onPress={openRangePicker} activeOpacity={0.8}>
+                <View pointerEvents="none">
+                  <Input
+                    placeholder="Select the Date Range"
+                    value={form.dateRange}
+                    error={errors.dateRange}
+                  />
+                </View>
+              </TouchableOpacity>
+
+
+              {/* {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  minimumDate={new Date()} // ✅ disables past dates
+                  onChange={onChangeNew}
+                />
+              )} */}
+
+              {show && (
+                <DateTimePicker
+                  value={date}
+                  mode="date"
+                  minimumDate={picking === 'end' && startDate ? startDate : new Date()}
+                  onChange={onChangeNew}
+                />
+              )}
+
+
 
               {/* Delivery Method Input */}
               <View style={{ flexDirection: 'row', gap: windowWidth(20), marginTop: windowHeight(20) }}>
