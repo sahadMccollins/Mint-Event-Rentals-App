@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { Header, Divider } from '@commonComponents';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native';
@@ -40,7 +40,13 @@ export default function OrderHistory({ navigation }) {
         />
         <ScrollView>
           {/* <SearchBar t={t} colors={colors} onFilterPress={onFilterPress} /> */}
-          <OpenOrders orders={orders} t={t} colors={colors} navigation={navigation} />
+          {loading ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : (
+            <OpenOrders orders={orders} t={t} colors={colors} navigation={navigation} />
+          )}
           {/* <Divider />
           <PastOrders
             t={t}

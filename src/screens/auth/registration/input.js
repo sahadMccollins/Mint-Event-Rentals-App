@@ -173,13 +173,13 @@ const input = ({
               onPress={onSignUp}
             />
 
-            <SocialLogin
+            {/* <SocialLogin
               t={t}
               setGoogleLoading={setGoogleLoading}
               colors={colors}
               navigation={navigation}
               from="RegistrationScreen"
-            />
+            /> */}
 
             <View
               style={[

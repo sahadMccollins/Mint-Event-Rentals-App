@@ -1,5 +1,6 @@
 export * from './homeHeader';
 export * from './input';
+export * from './inputPhone';
 export * from './button';
 export * from './header';
 export * from './product';

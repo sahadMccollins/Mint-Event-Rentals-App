@@ -68,13 +68,13 @@ const input = ({
         fontSize={fontSizes.FONT22}
         onPress={goToHome}
       />
-      <SocialLogin
+      {/* <SocialLogin
         t={t}
         setGoogleLoading={setGoogleLoading}
         colors={colors}
         navigation={navigation}
         from="LoginScreen"
-      />
+      /> */}
       <View style={[styles.createNewMainView, { flexDirection: viewRTLStyle }]}>
         <Text style={styles.createNewText}>{t('login.ifNew')}</Text>
         <Text

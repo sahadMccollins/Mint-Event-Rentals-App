@@ -35,13 +35,38 @@
 
 
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, FlatList } from 'react-native';
 import styles from './styles';
 import { Product } from '@commonComponents';
+import { CommonModal, AddToCartModal } from '@otherComponent';
 
 export default categorys = props => {
   const { products, t, navigation } = props;
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const visibleAddToCartModal = useCallback(() => {
+    setShowAddToCartModal(prev => !prev);
+    // Clear data when closing
+    if (showAddToCartModal) {
+      setSelectedProduct(null);
+    }
+  }, [showAddToCartModal]);
+
+  const renderProduct = useCallback(({ item }) => (
+    <Product
+      product={item}
+      t={t}
+      disc
+      width={"50%"}
+      navigation={navigation}
+      onAddToCart={(product) => {
+        setSelectedProduct(product);
+        visibleAddToCartModal();
+      }}
+    />
+  ), [t, navigation, visibleAddToCartModal]);
 
   return (
     <View style={styles.mainContainer}>
@@ -51,15 +76,21 @@ export default categorys = props => {
         data={products}
         ItemSeparatorComponent={() => <View style={styles.seperator} />}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Product
-            product={item}
-            t={t}
-            disc
-            width={"50%"}
+        renderItem={renderProduct}
+      />
+
+      <CommonModal
+        modal={
+          <AddToCartModal
+            onPress={visibleAddToCartModal}
             navigation={navigation}
+            t={t}
+            from="shopPage"
+            product={selectedProduct}
           />
-        )}
+        }
+        showModal={showAddToCartModal}
+        visibleModal={visibleAddToCartModal}
       />
     </View>
   );

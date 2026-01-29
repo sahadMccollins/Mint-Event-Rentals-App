@@ -287,16 +287,22 @@ import { useValues } from '@App';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCart } from '../../../../context/cartContext';
 import { useCustomer } from '../../../../context/customerContext';
-import { Input, DropDown, TextArea } from '@commonComponents';
+import { Input, DropDown, TextArea, InputPhone } from '@commonComponents';
 import { splitName } from '../../../../utils/helper/helper';
 import { useShopifyCart } from '../../../../hooks/useShopifyCart';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
+
+const getVariantIdNumber = (gid) => {
+  if (!gid) return null;
+  const match = gid.match(/(\d+)$/);
+  return match ? match[1] : null;
+};
 
 export default function Payment({ navigation }) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const scrollViewRef = useRef();
+  const phoneRef = useRef();
   const { currSymbol, currValue } = useValues();
   const { cart } = useCart();
   const { clearCart } = useShopifyCart();
@@ -448,21 +454,17 @@ export default function Payment({ navigation }) {
           country: 'United Arab Emirates',
           zip: '12345',
         },
-        note: `Delivery Date: ${form.dateRange}, Event Type: ${form.eventType}`,
-        line_items: cart.items.map(item => ({
-          variant_id: item.variantId,
+        note: `Delivery Type: ${form.deliveryType}, Delivery Date: ${form.dateRange}, Event Type: ${form.eventType}, Source: Mobile App`,
+        line_items: cart?.map(item => ({
+          variant_id: getVariantIdNumber(item.merchandiseId),
           quantity: item.quantity,
         })),
       };
 
-      console.log("ccartItem", cart);
-
-      return
-
       // 🔹 Send to SAME backend as website
       const response = await fetch(
-        // 'https://mccollins-server.vercel.app/api/create-order',
-        'http://localhost:3000/api/create-order',
+        'https://mccollins-server.vercel.app/api/create-order',
+        // 'https://httpdump.app/dumps/2f97a6bc-9c52-4488-a7d7-bd93ec22b632',
         {
           method: 'POST',
           headers: {
@@ -476,10 +478,12 @@ export default function Payment({ navigation }) {
         throw new Error('Failed to create order');
       }
 
-      const order = await response.json();
+      // console.log("response", response);
+
+      // const order = await response.json();
 
       // 🔹 Clear cart (your context method)
-      // clearCart();
+      clearCart();
 
       Alert.alert(
         'Success',
@@ -488,7 +492,7 @@ export default function Payment({ navigation }) {
           {
             text: 'OK',
             onPress: () => {
-              navigation.navigate('ThankYou'); // or goBack()
+              navigation.replace("Drawer");
             },
           },
         ]
@@ -503,26 +507,6 @@ export default function Payment({ navigation }) {
       setSubmitting(false);
     }
   };
-
-  // const onChangeNew = (event, selectedDate) => {
-  //   setShow(false);
-
-  //   if (!selectedDate) return;
-
-  //   setDate(selectedDate);
-
-  //   // Format date (example: 18 Sep 2026)
-  //   const formattedDate = selectedDate.toLocaleDateString('en-GB', {
-  //     day: '2-digit',
-  //     month: 'short',
-  //     year: 'numeric',
-  //   });
-
-  //   onChange({
-  //     name: 'dateRange',
-  //     value: formattedDate,
-  //   });
-  // };
 
   const onChangeNew = (event, selectedDate) => {
     if (!selectedDate) {
@@ -624,13 +608,16 @@ export default function Payment({ navigation }) {
                 keyboardType="email-address"
               />
 
-              <Input
-                placeholder="Phone"
+              <InputPhone
+                label="Phone Number"
                 value={form.phone}
+                defaultCountry="AE"
                 onChangeText={value => onChange({ name: 'phone', value })}
+                onChangeFormattedText={(val) => onChange({ name: 'phone', value: val })}
                 error={errors.phone}
-                keyboardType="phone-pad"
               />
+
+
 
               {/* Business Details Section */}
               <Input
@@ -695,15 +682,6 @@ export default function Payment({ navigation }) {
                 </Text>
               )}
 
-              {/* Date Range Input */}
-              {/* <TouchableOpacity onPress={showDatepicker} >
-                <Input
-                  placeholder="Select the Date Range"
-                  value={form.dateRange}
-                  onChangeText={value => onChange({ name: 'dateRange', value })}
-                  error={errors.dateRange}
-                />
-              </TouchableOpacity> */}
               <TouchableOpacity onPress={openRangePicker} activeOpacity={0.8}>
                 <View pointerEvents="none">
                   <Input
@@ -713,18 +691,6 @@ export default function Payment({ navigation }) {
                   />
                 </View>
               </TouchableOpacity>
-
-
-              {/* {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode="date"
-                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                  minimumDate={new Date()} // ✅ disables past dates
-                  onChange={onChangeNew}
-                />
-              )} */}
 
               {show && (
                 <DateTimePicker

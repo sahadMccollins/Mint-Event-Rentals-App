@@ -237,7 +237,7 @@ export default function Product({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ paddingBottom: windowHeight(48) }}>
+    <SafeAreaView style={{ flex: 1, paddingBottom: windowHeight(48) }}>
       <Header
         text={product?.title}
         // showText

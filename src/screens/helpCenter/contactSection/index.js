@@ -34,7 +34,7 @@ export default function ContactSection(props) {
             id: 'call',
             title: "Call Us",
             icon: callIcon,
-            url: 'tel:+97142243543',
+            url: 'tel:8006468',
         },
         {
             id: 'email',

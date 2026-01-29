@@ -128,6 +128,21 @@ export default StyleSheet.create({
         flexDirection: 'row',
     },
 
+    sucessTextContainer: {
+        backgroundColor: '#e1f5e9',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: windowHeight(10),
+        flexDirection: 'row',
+        gap: windowWidth(10),
+    },
+
+    sucessText: {
+        textAlign: 'center',
+        fontSize: fontSizes.FONT15,
+        color: '#00a341'
+    },
+
     cartText: {
         color: appColors.primary,
         fontFamily: appFonts.LatoMedium,

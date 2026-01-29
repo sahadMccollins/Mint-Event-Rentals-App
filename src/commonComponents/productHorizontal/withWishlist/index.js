@@ -98,7 +98,7 @@ export default withWishlist = props => {
         <TouchableOpacity
           style={styles.option}
           activeOpacity={0.7}
-          onPress={() => removeFromCart(props.item.id)}>
+          onPress={() => removeFromCart(props.item.merchandiseId)}>
           <Remove />
           <Text
             style={[

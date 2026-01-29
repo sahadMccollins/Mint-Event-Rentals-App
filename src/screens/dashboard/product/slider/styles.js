@@ -10,7 +10,7 @@ export default sliderStyles = StyleSheet.create({
     width: '100%',
   },
   pagination: {
-    marginBottom: windowHeight(-22),
+    marginBottom: windowHeight(-12),
   },
   dot: {
     backgroundColor: appColors.divider,

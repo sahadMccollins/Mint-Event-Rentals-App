@@ -30,7 +30,7 @@ export default productDetail = props => {
           // marginVertical: windowHeight(6),
           fontSize: fontSizes.FONT17,
           fontFamily: appFonts.LatoMidum,
-          lineHeight: windowHeight(18),
+          lineHeight: windowHeight(15),
           textAlign: textRTLStyle,
         }}
 

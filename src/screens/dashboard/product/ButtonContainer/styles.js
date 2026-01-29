@@ -12,7 +12,7 @@ export default buttonContainerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    elevation: 10,
+    // elevation: 10,
     borderTopColor: appColors.divider,
     borderTopWidth: 1,
   },
